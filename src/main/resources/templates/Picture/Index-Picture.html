@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap CSS -->
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}"/>
+<title>Picture</title>
+</head>
+<body>
+
+	<div th:replace="Fragments/header::navbar()">
+	</div>
+	
+	<div>
+        <div class="container mt-5">
+            <div class="row justify-content-between">
+            <div>
+	            <form class="d-flex mb-3" method="get" action="/">
+					<input class="form-control me-2" type="search" placeholder="Search" th:value="${query}" name="query">
+					<br>
+						
+					<input type="submit" value="Search" class="btn btn-outline-success">
+				</form>
+            </div>
+            <a class="btn btn-primary mb-3" th:href="@{/create}">Create new Picture</a> <br>
+                <div class="col-4 d-flex justify-content-center card-group" th:each="pic : ${pictures}" th:object="${pic}">
+                    <div class="card mb-5" style="width: 30rem;">
+                        <div class="card-body p-0">
+                            <div style="height: 275px;">
+                                <img th:src="*{imgURL}" class="img-fluid rounded-top" style="height: 275px;">
+                            </div>
+                            
+                            <div class="btn btn-primary m-3" th:if="*{valid} == true">Visible</div>
+							<div class="btn btn-danger m-3" th:if="*{valid} == false">Not Visible</div>
+                            
+                            <h5 class="card-title m-3">[[*{title}]]</h5>
+                            <p class="card-text px-3">[[*{description}]]</p>
+
+                            <div class="categories m-3">
+                                <span th:each="cat : *{categories}" class="m-2 btn btn-success" th:object="${cat}">
+                                    [[*{name}]]
+                                </span>
+                            </div>
+
+                            <div class="tags m-3">
+                                <span th:each="tag : *{tags}" class="m-2 btn btn-primary" th:object="${tag}">
+                                    [[*{name}]]
+                                </span>
+                                <a th:href="@{/edit/{id}  (id=*{id}) }" class="btn btn-success ml-2">Update</a>
+                                <a th:href="@{/delete/{id}  (id=*{id}) }" class="btn btn-danger ml-2">Delete</a>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <a th:href="@{/show/{id}  (id=*{id}) }" class="view">View Comments</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${size} <= 0">
+                    <h3>There are no photos!</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</body>
+</html>
